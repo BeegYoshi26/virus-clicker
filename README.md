@@ -1,4 +1,4 @@
-# tkinter-clicker
+# virus-clicker
 A windows xp/7 inspired clicker game developed in python with Tkinter.
 
 The idea of my game is for the user to close windows that randomly appear on the screen to gain a currency and then spend that currency to speed up the process of collecting that currency.

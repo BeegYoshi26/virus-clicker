@@ -1,5 +1,7 @@
 from tkinter import *
 
+TITLE_FONT = ("Arial", 14, "bold")
+
 class clickerGUI:
     def __init__(self, root):
         self.root = root
@@ -8,35 +10,64 @@ class clickerGUI:
         self.container = Frame(self.root)
         self.container.grid(row=0, column=0, sticky="nsew")
 
-        self.container.rowconfigure(0, minsize=40, weight=1)
+        self.container.rowconfigure(0, weight=1)
 
         self.create_widgets()
 
     def create_widgets(self):
-
         # Upgrade menu, Button values to be changed for better game pacing.
 
+        # Upgrade frame
         self.create_upgrade_frame = Frame(self.container)
+        self.create_upgrade_frame.grid(row=0, column=0, sticky="nsew")
 
-        Label(self.root, text="Upgrades")
+        self.create_upgrade_frame.columnconfigure([0,1], minsize=100, weight=1)
+        self.create_upgrade_frame.rowconfigure([0,1,2,3,4,5,6], minsize=20, weight=1)
+
+        # Upgrade Label
+        Label(self.create_upgrade_frame, text="Upgrades", font= TITLE_FONT).grid(row=0, column=0, columnspan=2, pady=5)
         
-        Label(self.root, text="Auto-closer:")
+        # Auto-closer Label
+        Label(self.create_upgrade_frame, text="Auto-closer:").grid(row=1, column=0, pady=5)
+
+        # Auto-closer Button
         self.upgrade_btn1 = Button(self.create_upgrade_frame, text="10")
+        self.upgrade_btn1.grid(row=1, column=1, padx=5, pady=2)
 
-        Label(self.root, text="Bigger Windows:")
+        # Bigger windows Label
+        Label(self.create_upgrade_frame, text="Bigger Windows:").grid(row=2, column=0, pady=5)
+
+        # Nigger windows Button
         self.upgrade_btn2 = Button(self.create_upgrade_frame, text="100")
+        self.upgrade_btn2.grid(row=2, column=1, padx=5, pady=2)
 
-        Label(self.root, text=":")
+        # Label
+        Label(self.create_upgrade_frame, text=":").grid(row=3, column=0, pady=5)
+
+        # Button
         self.upgrade_btn3 = Button(self.create_upgrade_frame, text="250")
+        self.upgrade_btn3.grid(row=3, column=1, padx=5, pady=2)
 
-        Label(self.root, text=":")
+        # Label
+        Label(self.create_upgrade_frame, text=":").grid(row=4, column=0, pady=5)
+
+        # Button
         self.upgrade_btn4 = Button(self.create_upgrade_frame, text="1000")
+        self.upgrade_btn4.grid(row=4, column=1, padx=5, pady=2)
 
-        Label(self.root, text=":")
+        # Label
+        Label(self.create_upgrade_frame, text=":").grid(row=5, column=0, pady=5)
+
+        # Button
         self.upgrade_btn5 = Button(self.create_upgrade_frame, text="2500")
+        self.upgrade_btn5.grid(row=5, column=1, padx=5, pady=2)
 
-        Label(self.root, text="Anti-virus:")
+        # Anti-virus Label
+        Label(self.create_upgrade_frame, text="Anti-virus:").grid(row=6, column=0, pady=5)
+        
+        # Anti-virus Button
         self.upgrade_btn6 = Button(self.create_upgrade_frame, text="10000")
+        self.upgrade_btn6.grid(row=6, column=1, padx=5, pady=2)
         
 root = Tk()
 run = clickerGUI(root)

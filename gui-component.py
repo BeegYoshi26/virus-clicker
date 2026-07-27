@@ -27,38 +27,38 @@ class clickerGUI:
         # Upgrade Label
         Label(self.create_upgrade_frame, text="Upgrades", font= TITLE_FONT).grid(row=0, column=0, columnspan=2, pady=5)
         
-        # Auto-closer Label
-        Label(self.create_upgrade_frame, text="Auto-closer:").grid(row=1, column=0, pady=5)
+        # Ad-blocker Label
+        Label(self.create_upgrade_frame, text="Ad-blocker:").grid(row=1, column=0, pady=5)
 
-        # Auto-closer Button
+        # Ad-blocker Button
         self.upgrade_btn1 = Button(self.create_upgrade_frame, text="10")
         self.upgrade_btn1.grid(row=1, column=1, padx=5, pady=2)
 
         # Bigger windows Label
         Label(self.create_upgrade_frame, text="Bigger Windows:").grid(row=2, column=0, pady=5)
 
-        # Nigger windows Button
+        # Bigger windows Button
         self.upgrade_btn2 = Button(self.create_upgrade_frame, text="100")
         self.upgrade_btn2.grid(row=2, column=1, padx=5, pady=2)
 
-        # Label
-        Label(self.create_upgrade_frame, text=":").grid(row=3, column=0, pady=5)
+        # Double click Label
+        Label(self.create_upgrade_frame, text="Double click:").grid(row=3, column=0, pady=5)
 
-        # Button
+        # Double click Button
         self.upgrade_btn3 = Button(self.create_upgrade_frame, text="250")
         self.upgrade_btn3.grid(row=3, column=1, padx=5, pady=2)
 
-        # Label
-        Label(self.create_upgrade_frame, text=":").grid(row=4, column=0, pady=5)
+        # VPN Label
+        Label(self.create_upgrade_frame, text="VPN:").grid(row=4, column=0, pady=5)
 
-        # Button
+        # VPN Button
         self.upgrade_btn4 = Button(self.create_upgrade_frame, text="1000")
         self.upgrade_btn4.grid(row=4, column=1, padx=5, pady=2)
 
-        # Label
-        Label(self.create_upgrade_frame, text=":").grid(row=5, column=0, pady=5)
+        # Tech support Label
+        Label(self.create_upgrade_frame, text="Tech support:").grid(row=5, column=0, pady=5)
 
-        # Button
+        # Tech support Button
         self.upgrade_btn5 = Button(self.create_upgrade_frame, text="2500")
         self.upgrade_btn5.grid(row=5, column=1, padx=5, pady=2)
 

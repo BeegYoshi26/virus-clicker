@@ -15,7 +15,10 @@ class clickerGUI:
         self.create_widgets()
 
     def create_widgets(self):
+
         # Upgrade menu, Button values to be changed for better game pacing.
+
+        """ Need to add commands to buttons """
 
         # Upgrade frame
         self.create_upgrade_frame = Frame(self.container)
@@ -68,6 +71,31 @@ class clickerGUI:
         # Anti-virus Button
         self.upgrade_btn6 = Button(self.create_upgrade_frame, text="10000")
         self.upgrade_btn6.grid(row=6, column=1, padx=5, pady=2)
+
+    
+    def popup_gui(self):
+
+        # Creates the clickable popup windows 
+
+        popup = Toplevel(self.root)
+        popup.title("Close me!")
+
+        popup_btn = Button(popup, text="[X]")
+        popup_btn.pack()
+
+
+    def name_entry_gui(self):
+
+        # Creates the name entry window for saving
+        save_win = Toplevel(self.root)
+        save_win.title("Save Game")
+
+        save_lbl = Label(save_win, text="Enter your name and save!")
+        save_lbl.pack()
+
+        name_entry = Entry(save_win, )
+        name_entry.pack()
+        
         
 root = Tk()
 run = clickerGUI(root)

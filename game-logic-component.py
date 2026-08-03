@@ -1,22 +1,24 @@
 from tkinter import *
+import random
 
 TITLE_FONT = ("Arial", 14, "bold")
+MAX_POPUPS = 10
 
 class clickerGUI:
     def __init__(self, root):
         self.root = root
         root.title("Virus Clicker")
 
+
+        # Player variables
         self.currency = 0
         self.click = 1
         self.cps = 0
-
-        self.container = Frame(self.root)
-        self.container.grid(row=0, column=0, sticky="nsew")
-
-        self.container.rowconfigure(0, weight=1)
+        self.spawn_rate = 2600
+        self.active_popups = {}
 
         self.create_widgets()
+        self.spawn_loop()
 
     def create_widgets(self):
 
@@ -25,7 +27,7 @@ class clickerGUI:
         """ Need to add commands to buttons """
 
         # Upgrade frame
-        self.create_upgrade_frame = Frame(self.container)
+        self.create_upgrade_frame = Frame()
         self.create_upgrade_frame.grid(row=0, column=0, sticky="nsew")
 
         self.create_upgrade_frame.columnconfigure([0,1], minsize=100, weight=1)
@@ -80,28 +82,37 @@ class clickerGUI:
         self.upgrade_btn6 = Button(self.create_upgrade_frame, text="10000")
         self.upgrade_btn6.grid(row=7, column=1, padx=5, pady=2)
 
-        self.popup_gui()
-
     
     def popup_gui(self):
+        # Checks the amount of active popups is under the max
+        if len(self.active_popups) >= MAX_POPUPS:
+            return
 
         # Creates the clickable popup windows 
+        popup = Toplevel()
+        popup_id = id(popup)
+        popup.title("Close me!")
+        popup.geometry("250x100")
 
-        self.popup = Toplevel()
-        self.popup.title("Close me!")
+        popup_btn = Button(popup, text="[X]", command=lambda:self.close_popup(popup_id))
+        popup_btn.grid(row=0, column=0, sticky="NSEW")
 
-        popup_btn = Button(self.popup, text="[X]", command=lambda:self.close_popup())
-        popup_btn.pack(pady=5)
+        self.active_popups[popup_id] = popup
 
-    def close_popup(self):
+    def close_popup(self, popup_id):
 
         # Closes the popup and adds to the player currency
         self.currency = self.currency + self.click
-        self.popup.destroy()
         self.update_gui()
 
+    def spawn_loop(self):
 
-
+        # Spawns the popup window
+        self.popup_gui()
+        # waits specified spawn rate
+        spawn_time = self.spawn_rate
+        # restarts the loop
+        self.root.after(spawn_time, self.spawn_loop)
 
     def name_entry_gui(self):
 

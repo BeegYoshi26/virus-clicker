@@ -97,16 +97,25 @@ class clickerGUI:
         popup_btn = Button(popup, text="[X]", command=lambda:self.close_popup(popup_id))
         popup_btn.grid(row=0, column=0, sticky="NSEW")
 
+        popup.bind("<Destroy>", lambda e: self.unregister_popup(popup_id))
+
         self.active_popups[popup_id] = popup
 
     def close_popup(self, popup_id):
-
         # Closes the popup and adds to the player currency
-        self.currency = self.currency + self.click
-        self.update_gui()
+        if popup_id in self.active_popups:
+            popup = self.active_popups[popup_id]
+            popup.destroy()
+            self.currency = self.currency + self.click
+            self.update_gui()
+
+    def unregister_popup(self, popup_id):
+        # Triggers when popup is destroyed
+        if popup_id in self.active_popups:
+            # Removes popup from active popups
+            del self.active_popups[popup_id]
 
     def spawn_loop(self):
-
         # Spawns the popup window
         self.popup_gui()
         # waits specified spawn rate
@@ -115,7 +124,6 @@ class clickerGUI:
         self.root.after(spawn_time, self.spawn_loop)
 
     def name_entry_gui(self):
-
         # Creates the name entry window for saving
         save_win = Toplevel(self.root)
         save_win.title("Save Game")
@@ -127,6 +135,7 @@ class clickerGUI:
         name_entry.pack()
 
     def update_gui(self):
+        # Updates the currency label to players current currency
         self.currency_lbl.config(text=f"Currency: {self.currency}")
         
 root = Tk()

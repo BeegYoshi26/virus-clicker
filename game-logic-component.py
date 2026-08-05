@@ -8,7 +8,7 @@ class clickerGUI:
     def __init__(self, root):
         self.root = root
         root.title("Virus Clicker")
-
+        root.attributes('-topmost', True)
 
         # Player variables
         self.currency = 0
@@ -37,7 +37,7 @@ class clickerGUI:
         Label(self.create_upgrade_frame, text="Upgrades", font=TITLE_FONT).grid(row=0, column=0, columnspan=2, pady=5)
 
         # Currency Label
-        self.currency_lbl = Label(self.create_upgrade_frame, text=f"Currency: 0", font=TITLE_FONT)
+        self.currency_lbl = Label(self.create_upgrade_frame, text=f"Currency: {self.currency}", font=TITLE_FONT)
         self.currency_lbl.grid(row=1, column=0, columnspan=2, pady=5)
         
         # Ad-blocker Label
@@ -92,11 +92,26 @@ class clickerGUI:
         popup = Toplevel()
         popup_id = id(popup)
         popup.title("Close me!")
-        popup.geometry("250x100")
+        
+        # Set window screen and height
+        width = 250
+        height = 100
+
+        # Get screen width and height
+        screen_width = popup.winfo_screenwidth()
+        screen_height = popup.winfo_screenheight()
+
+        # Generate random x and y coordinates within the screen bounds
+        x = random.randint(0, screen_width - width)
+        y = random.randint(0, screen_height - height)
+
+        # Set geometry with size and random position (WxH+X+Y)
+        popup.geometry(f"{width}x{height}+{x}+{y}")
 
         popup_btn = Button(popup, text="[X]", command=lambda:self.close_popup(popup_id))
         popup_btn.grid(row=0, column=0, sticky="NSEW")
 
+        # When popup is destroyed
         popup.bind("<Destroy>", lambda e: self.unregister_popup(popup_id))
 
         self.active_popups[popup_id] = popup
@@ -118,9 +133,9 @@ class clickerGUI:
     def spawn_loop(self):
         # Spawns the popup window
         self.popup_gui()
-        # waits specified spawn rate
+        # Waits specified spawn rate
         spawn_time = self.spawn_rate
-        # restarts the loop
+        # Restarts the loop
         self.root.after(spawn_time, self.spawn_loop)
 
     def name_entry_gui(self):

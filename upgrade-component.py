@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+import time
 
 TITLE_FONT = ("Arial", 14, "bold")
 MAX_POPUPS = 10
@@ -11,7 +12,7 @@ class clickerGUI:
         root.attributes('-topmost', True)
 
         # Player variables
-        self.currency = 0
+        self.currency = 1000
         self.click = 1
         self.cps = 0
         self.spawn_rate = 2600
@@ -55,18 +56,18 @@ class clickerGUI:
         self.upgrade_btn1 = Button(self.create_upgrade_frame, text=self.upgrade_1_value, command=lambda:self.purchace_extra_click())
         self.upgrade_btn1.grid(row=2, column=1, padx=5, pady=2)
 
-        # Auto-clicker windows Label
-        Label(self.create_upgrade_frame, text="Auto-clicker:").grid(row=3, column=0, pady=5)
+        # Faster Popups Label
+        Label(self.create_upgrade_frame, text="Faster Popups:").grid(row=3, column=0, pady=5)
 
-        # Auto-clicker Button
-        self.upgrade_btn2 = Button(self.create_upgrade_frame, text=self.upgrade_2_value, command=lambda:self.purchace_auto_clicker())
+        # Faster Popups Button
+        self.upgrade_btn2 = Button(self.create_upgrade_frame, text=self.upgrade_2_value, command=lambda:self.purchace_faster_popups())
         self.upgrade_btn2.grid(row=3, column=1, padx=5, pady=2)
 
-        # Double click Label
-        Label(self.create_upgrade_frame, text="Faster popups:").grid(row=4, column=0, pady=5)
+        # Auto-clicker Label
+        Label(self.create_upgrade_frame, text="Auto-clicker:").grid(row=4, column=0, pady=5)
 
-        # Faster popups click Button
-        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value, command=lambda:self.purchace_faster_popups())
+        # Auto-clicker click Button
+        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value,command=lambda:self.purchace_auto_clicker())
         self.upgrade_btn3.grid(row=4, column=1, padx=5, pady=2)
 
         #  Label
@@ -178,8 +179,22 @@ class clickerGUI:
     def purchace_faster_popups(self):
         if self.currency >= self.upgrade_2_value:
             self.currency = self.currency - self.upgrade_2_value
+            self.spawn_rate = self.spawn_rate - 300
+            self.upgrade_2_value = int(self.upgrade_2_value * 1.5)
+            self.upgrade_btn2.config(text=self.upgrade_2_value)
+            self.update_gui()
 
     def purchace_auto_clicker(self):
+        if self.currency >= self.upgrade_3_value:
+            self.currency = self.currency - self.upgrade_3_value
+            self.cps = self.cps + 1
+            self.upgrade_3_value = int(self.upgrade_3_value * 1.5)
+            self.upgrade_btn3.config(text=self.upgrade_3_value)
+            self.autoclick()
+            self.update_gui()
+
+
+    def autoclick(self):
         pass
             
         

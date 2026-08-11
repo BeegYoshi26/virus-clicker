@@ -12,7 +12,7 @@ class clickerGUI:
         root.attributes('-topmost', True)
 
         # Player variables
-        self.currency = 1000
+        self.currency = 100000
         self.click = 1
         self.cps = 0
         self.spawn_rate = 2600
@@ -28,6 +28,7 @@ class clickerGUI:
 
         self.create_widgets()
         self.spawn_loop()
+        self.autoclick()
 
     def create_widgets(self):
 
@@ -67,7 +68,7 @@ class clickerGUI:
         Label(self.create_upgrade_frame, text="Auto-clicker:").grid(row=4, column=0, pady=5)
 
         # Auto-clicker click Button
-        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value,command=lambda:self.purchace_auto_clicker())
+        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value, command=lambda:self.purchace_auto_clicker())
         self.upgrade_btn3.grid(row=4, column=1, padx=5, pady=2)
 
         #  Label
@@ -190,12 +191,16 @@ class clickerGUI:
             self.cps = self.cps + 1
             self.upgrade_3_value = int(self.upgrade_3_value * 1.5)
             self.upgrade_btn3.config(text=self.upgrade_3_value)
-            self.autoclick()
             self.update_gui()
+            
 
 
     def autoclick(self):
-        pass
+        if self.cps > 0:
+            self.currency += self.cps
+        self.update_gui()
+        self.root.after(1000, self.autoclick)
+
             
         
 root = Tk()

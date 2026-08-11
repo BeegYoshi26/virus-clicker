@@ -12,11 +12,15 @@ class clickerGUI:
         root.attributes('-topmost', True)
 
         # Player variables
-        self.currency = 100000
+        self.currency = 10000000
         self.click = 1
         self.cps = 0
         self.spawn_rate = 2600
         self.active_popups = {}
+        self.player_purchases = 0
+        self.crit_chance = 0.05
+        self.crit_multiplier = 10
+        self.game_won = False
 
         # Upgrade values
         self.upgrade_1_value = 10
@@ -71,25 +75,25 @@ class clickerGUI:
         self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value, command=lambda:self.purchace_auto_clicker())
         self.upgrade_btn3.grid(row=4, column=1, padx=5, pady=2)
 
-        #  Label
+       # Multiplier / VPN Label
         Label(self.create_upgrade_frame, text="VPN:").grid(row=5, column=0, pady=5)
 
-        #  Button
-        self.upgrade_btn4 = Button(self.create_upgrade_frame, text=self.upgrade_4_value)
+        # Multiplier Button
+        self.upgrade_btn4 = Button(self.create_upgrade_frame, text=self.upgrade_4_value, command=lambda:self.purchace_multiplier())
         self.upgrade_btn4.grid(row=5, column=1, padx=5, pady=2)
 
-        # Tech support Label
-        Label(self.create_upgrade_frame, text="Tech support:").grid(row=6, column=0, pady=5)
+        # Tech support Label (Upgrade 5 - Critical Strike from Option 2)
+        Label(self.create_upgrade_frame, text="Tech Support (Crit):").grid(row=6, column=0, pady=5)
 
         # Tech support Button
-        self.upgrade_btn5 = Button(self.create_upgrade_frame, text=self.upgrade_5_value)
+        self.upgrade_btn5 = Button(self.create_upgrade_frame, text=self.upgrade_5_value, command=lambda:self.purchace_tech_support())
         self.upgrade_btn5.grid(row=6, column=1, padx=5, pady=2)
 
         # Anti-virus Label
         Label(self.create_upgrade_frame, text="Anti-virus:").grid(row=7, column=0, pady=5)
         
         # Anti-virus Button
-        self.upgrade_btn6 = Button(self.create_upgrade_frame, text=self.upgrade_6_value)
+        self.upgrade_btn6 = Button(self.create_upgrade_frame, text=self.upgrade_6_value, command=lambda:self.purchace_anti_virus())
         self.upgrade_btn6.grid(row=7, column=1, padx=5, pady=2)
 
     
@@ -131,7 +135,14 @@ class clickerGUI:
         if popup_id in self.active_popups:
             popup = self.active_popups[popup_id]
             popup.destroy()
-            self.currency = self.currency + self.click
+
+
+            earned_currency = self.click
+            if random.random() < self.crit_chance:
+                earned_currency *= self.crit_multiplier
+
+            
+            self.currency = self.currency + earned_currency
             self.update_gui()
 
     def unregister_popup(self, popup_id):
@@ -141,12 +152,13 @@ class clickerGUI:
             del self.active_popups[popup_id]
 
     def spawn_loop(self):
-        # Spawns the popup window
-        self.popup_gui()
-        # Waits specified spawn rate
-        spawn_time = self.spawn_rate
-        # Restarts the loop
-        self.root.after(spawn_time, self.spawn_loop)
+        if not self.game_won:
+            # Spawns the popup window
+            self.popup_gui()
+            # Waits specified spawn rate
+            spawn_time = self.spawn_rate
+            # Restarts the loop
+            self.root.after(spawn_time, self.spawn_loop)
 
     def name_entry_gui(self):
         # Creates the name entry window for saving
@@ -166,42 +178,113 @@ class clickerGUI:
     def purchace_extra_click(self):
         # Check if player has enough currency to purchase
         if self.currency >= self.upgrade_1_value:
+
             # Takes the upgrade value from the players currency
             self.currency = self.currency - self.upgrade_1_value
+
             # Upgrades the players click
             self.click = self.click + 1
+
             # Increases the upgrade value 
             self.upgrade_1_value = int(self.upgrade_1_value * 1.5)
-            # Updates the upgrade button
             self.upgrade_btn1.config(text=self.upgrade_1_value)
+
             # Updates the player currency gui
             self.update_gui()
 
     def purchace_faster_popups(self):
+        # Check if player has enough currency to purchase
         if self.currency >= self.upgrade_2_value:
+
+            # Takes the upgrade value from the players currency
             self.currency = self.currency - self.upgrade_2_value
+
+            # Decreases the popup spawn rate
             self.spawn_rate = self.spawn_rate - 300
+
+            # Increases the value of the upgrade
             self.upgrade_2_value = int(self.upgrade_2_value * 1.5)
             self.upgrade_btn2.config(text=self.upgrade_2_value)
+
+            # Updates the gui
             self.update_gui()
 
     def purchace_auto_clicker(self):
+        # Check if player has enough currency to purchase
         if self.currency >= self.upgrade_3_value:
+
+            # Takes the upgrade value from the players currency
             self.currency = self.currency - self.upgrade_3_value
+
+            # Increases the players clicks per second
             self.cps = self.cps + 1
+
+            # Increases the value of the upgrade
             self.upgrade_3_value = int(self.upgrade_3_value * 1.5)
             self.upgrade_btn3.config(text=self.upgrade_3_value)
-            self.update_gui()
-            
 
+            # Updates the gui
+            self.update_gui()
 
     def autoclick(self):
+        # Adds cps to player currency when above 0
         if self.cps > 0:
             self.currency += self.cps
+
+        # Updates gui
         self.update_gui()
+        # Waits one second then calls then loops the function
         self.root.after(1000, self.autoclick)
 
+    def purchace_multiplier(self):
+        if self.currency >= self.upgrade_4_value:
+            self.currency = self.currency - self.upgrade_4_value
             
+            self.click = int(self.click * 2)
+            self.spawn_rate = int(self.spawn_rate * 0.9)
+            self.cps = max(1, self.cps * 2)
+
+            self.upgrade_4_value = int(self.upgrade_4_value * 1.5)
+            self.upgrade_btn4.config(text=self.upgrade_4_value)
+            self.update_gui()
+
+    def purchace_tech_support(self):
+        if self.currency >= self.upgrade_5_value:
+            self.currency = self.currency - self.upgrade_5_value
+            
+            self.crit_chance = min(0.50, self.crit_chance + 0.03)
+            
+            self.upgrade_5_value = int(self.upgrade_5_value * 1.6)
+            self.upgrade_btn5.config(text=self.upgrade_5_value)
+            self.update_gui()
+
+    def purchace_anti_virus(self):
+        if not self.game_won and self.currency >= self.upgrade_6_value:
+            self.currency = self.currency - self.upgrade_6_value
+            
+            self.game_won = True
+            self.update_gui()
+
+            
+            # Close all currently open popup windows
+            for popup in list(self.active_popups.values()):
+                try:
+                    popup.destroy()
+                except:
+                    pass
+            self.active_popups.clear()
+
+
+
+            # Create a victory screen window
+            win_win = Toplevel(self.root)
+            win_win.title("Victory!")
+            win_win.geometry("300x150")
+            win_win.attributes('-topmost', True)
+
+            Label(win_win, text="SYSTEM CLEANED!", font=("Arial", 16, "bold"), fg="green").pack(pady=20)
+            Label(win_win, text="You successfully installed the Anti-Virus\nand eradicated all viruses!", font=("Arial", 10)).pack(pady=5)
+            Button(win_win, text="Close Game", command=self.root.destroy).pack(pady=10)
         
 root = Tk()
 run = clickerGUI(root)

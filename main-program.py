@@ -3,38 +3,47 @@ import random
 import json
 import os
 
-TITLE_FONT = ("Arial", 14, "bold")
+TITLE_FONT = ("Segoe UI", 12, "bold")
+REGULAR_FONT = ("Segoe UI", 9)
 MAX_POPUPS = 10
 SAVE_FILE = "saves.json"
+
+# Windows 7 Aero-inspired styling colors
+WIN7_BG = "#F0F0F0"
+WIN7_BTN_BG = "#E1E1E1"
+WIN7_BTN_ACTIVE = "#CCE8FF"
+WIN7_ACCENT = "#3C7FB1"
 
 class StartMenu:
     def __init__(self, root):
         self.root = root
         self.root.title("Virus Clicker - Select Save")
         self.root.geometry("320x260")
+        self.root.config(bg=WIN7_BG)
         self.root.attributes('-topmost', True)
 
-        Label(self.root, text="Virus Clicker", font=("Arial", 16, "bold")).pack(pady=15)
+        Label(self.root, text="Virus Clicker", font=("Segoe UI", 14, "bold"), bg=WIN7_BG, fg="#003399").pack(pady=15)
 
-        Button(self.root, text="New Game", width=20, command=self.open_new_game).pack(pady=5)
-        Button(self.root, text="Load Game", width=20, command=self.open_load_game).pack(pady=5)
-        Button(self.root, text="Quit", width=20, command=self.root.destroy).pack(pady=5)
+        Button(self.root, text="New Game", width=20, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=self.open_new_game).pack(pady=5)
+        Button(self.root, text="Load Game", width=20, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=self.open_load_game).pack(pady=5)
+        Button(self.root, text="Quit", width=20, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=self.root.destroy).pack(pady=5)
 
     def open_new_game(self):
         # Opens a window prompting the user to enter a name.
         name_win = Toplevel(self.root)
         name_win.title("New Game")
         name_win.geometry("300x200")
+        name_win.config(bg=WIN7_BG)
         name_win.attributes('-topmost', True)
 
-        Label(name_win, text="Enter your name:", font=TITLE_FONT).pack(pady=5)
-        Label(name_win, text="(Letters only, under 12 characters)", font=("Arial", 8), fg="gray").pack(pady=2)
+        Label(name_win, text="Enter your name:", font=TITLE_FONT, bg=WIN7_BG).pack(pady=5)
+        Label(name_win, text="(Letters only, under 12 characters)", font=("Segoe UI", 8), bg=WIN7_BG, fg="gray").pack(pady=2)
         
-        name_entry = Entry(name_win)
+        name_entry = Entry(name_win, font=REGULAR_FONT)
         name_entry.pack(pady=5)
         name_entry.focus()
 
-        error_lbl = Label(name_win, text="", font=("Arial", 9), fg="red")
+        error_lbl = Label(name_win, text="", font=("Segoe UI", 9), bg=WIN7_BG, fg="red")
         error_lbl.pack(pady=2)
 
         def confirm_name():
@@ -75,7 +84,7 @@ class StartMenu:
             main_root = Tk()
             clickerGUI(main_root, data)
 
-        Button(name_win, text="Start", command=confirm_name).pack(pady=10)
+        Button(name_win, text="Start", width=10, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=confirm_name).pack(pady=10)
 
     def open_load_game(self):
         # Checks for existing save files
@@ -83,8 +92,9 @@ class StartMenu:
             load_win = Toplevel(self.root)
             load_win.title("Error")
             load_win.geometry("200x100")
+            load_win.config(bg=WIN7_BG)
             load_win.attributes('-topmost', True)
-            Label(load_win, text="No save files found!").pack(padx=20, pady=20)
+            Label(load_win, text="No save files found!", bg=WIN7_BG, font=REGULAR_FONT).pack(padx=20, pady=20)
             return
 
         try:
@@ -97,23 +107,25 @@ class StartMenu:
             load_win = Toplevel(self.root)
             load_win.title("Error")
             load_win.geometry("200x100")
+            load_win.config(bg=WIN7_BG)
             load_win.attributes('-topmost', True)
-            Label(load_win, text="No save files found!").pack(padx=20, pady=20)
+            Label(load_win, text="No save files found!", bg=WIN7_BG, font=REGULAR_FONT).pack(padx=20, pady=20)
             return
 
         # Opens a load game window
         load_win = Toplevel(self.root)
         load_win.title("Load Game")
         load_win.geometry("280x320")
+        load_win.config(bg=WIN7_BG)
         load_win.attributes('-topmost', True)
 
-        Label(load_win, text="Select a Save:", font=TITLE_FONT).pack(pady=10)
+        Label(load_win, text="Select a Save:", font=TITLE_FONT, bg=WIN7_BG).pack(pady=10)
 
-        listbox_frame = Frame(load_win)
+        listbox_frame = Frame(load_win, bg=WIN7_BG)
         listbox_frame.pack(fill=BOTH, expand=True, padx=10)
 
         # Listbox for all saves
-        save_listbox = Listbox(listbox_frame)
+        save_listbox = Listbox(listbox_frame, font=REGULAR_FONT, bd=2)
         for name in saves.keys():
             save_listbox.insert(END, name)
         save_listbox.pack(side=LEFT, fill=BOTH, expand=True)
@@ -160,11 +172,11 @@ class StartMenu:
                 if not saves:
                     load_win.destroy()
 
-        btn_frame = Frame(load_win)
+        btn_frame = Frame(load_win, bg=WIN7_BG)
         btn_frame.pack(pady=10)
 
-        Button(btn_frame, text="Load Profile", width=10, command=confirm_load).pack(side=LEFT, padx=5)
-        Button(btn_frame, text="Delete Save", width=10, bg="lightcoral", command=delete_save).pack(side=LEFT, padx=5)
+        Button(btn_frame, text="Load Profile", width=10, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=confirm_load).pack(side=LEFT, padx=5)
+        Button(btn_frame, text="Delete Save", width=10, bg="#FFD1D1", font=REGULAR_FONT, command=delete_save).pack(side=LEFT, padx=5)
 
     def save_to_file(self, data):
         saves = {}
@@ -187,6 +199,9 @@ class clickerGUI:
         self.root = root
         self.player_name = player_data["name"]
         root.title(f"Virus Clicker - {self.player_name}")
+        root.geometry("320x420")
+        root.minsize(280, 380)
+        root.config(bg=WIN7_BG)
         root.attributes('-topmost', True)
 
         # Player variables
@@ -217,64 +232,71 @@ class clickerGUI:
 
         # Upgrade menu, Button values to be changed for better game pacing.
 
+        # Configure root grid weights to make the upgrade frame fully resizable
+        self.root.rowconfigure(0, weight=1)
+        self.root.columnconfigure(0, weight=1)
+
         # Upgrade frame
-        self.create_upgrade_frame = Frame()
+        self.create_upgrade_frame = Frame(self.root, bg=WIN7_BG, padx=10, pady=10)
         self.create_upgrade_frame.grid(row=0, column=0, sticky="nsew")
 
-        self.create_upgrade_frame.columnconfigure([0,1], minsize=100, weight=1)
-        self.create_upgrade_frame.rowconfigure([0,1,2,3,4,5,6,7,8], minsize=20, weight=1)
+        self.create_upgrade_frame.columnconfigure(0, weight=2)
+        self.create_upgrade_frame.columnconfigure(1, weight=1)
+        for i in range(9):
+            self.create_upgrade_frame.rowconfigure(i, weight=1)
 
         # Upgrade Label
-        Label(self.create_upgrade_frame, text=f"Upgrades ({self.player_name})", font=TITLE_FONT).grid(row=0, column=0, columnspan=2, pady=5)
+        Label(self.create_upgrade_frame, text=f"Upgrades ({self.player_name})", font=TITLE_FONT, bg=WIN7_BG, fg="#003399").grid(row=0, column=0, columnspan=2, pady=5)
 
         # Currency Label
-        self.currency_lbl = Label(self.create_upgrade_frame, text=f"Currency: {self.currency}", font=TITLE_FONT)
+        self.currency_lbl = Label(self.create_upgrade_frame, text=f"Currency: {self.currency}", font=TITLE_FONT, bg=WIN7_BG)
         self.currency_lbl.grid(row=1, column=0, columnspan=2, pady=5)
         
         # Extra click Label
-        Label(self.create_upgrade_frame, text="Extra click:").grid(row=2, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="Extra click:", font=REGULAR_FONT, bg=WIN7_BG).grid(row=2, column=0, sticky="w", pady=2)
 
         # Extra click Button
-        self.upgrade_btn1 = Button(self.create_upgrade_frame, text=self.upgrade_1_value, command=lambda:self.purchace_extra_click())
-        self.upgrade_btn1.grid(row=2, column=1, padx=5, pady=2)
+        self.upgrade_btn1 = Button(self.create_upgrade_frame, text=self.upgrade_1_value, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_extra_click())
+        self.upgrade_btn1.grid(row=2, column=1, sticky="ew", padx=5, pady=2)
 
         # Faster Popups Label
-        Label(self.create_upgrade_frame, text="Faster Popups:").grid(row=3, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="Faster Popups:", font=REGULAR_FONT, bg=WIN7_BG).grid(row=3, column=0, sticky="w", pady=2)
 
         # Faster Popups Button
-        self.upgrade_btn2 = Button(self.create_upgrade_frame, text=self.upgrade_2_value, command=lambda:self.purchace_faster_popups())
-        self.upgrade_btn2.grid(row=3, column=1, padx=5, pady=2)
+        btn2_text = "MAX" if self.spawn_rate <= 600 else self.upgrade_2_value
+        self.upgrade_btn2 = Button(self.create_upgrade_frame, text=btn2_text, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_faster_popups())
+        self.upgrade_btn2.grid(row=3, column=1, sticky="ew", padx=5, pady=2)
 
         # Auto-clicker Label
-        Label(self.create_upgrade_frame, text="Auto-clicker:").grid(row=4, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="Auto-clicker:", font=REGULAR_FONT, bg=WIN7_BG).grid(row=4, column=0, sticky="w", pady=2)
 
         # Auto-clicker click Button
-        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value, command=lambda:self.purchace_auto_clicker())
-        self.upgrade_btn3.grid(row=4, column=1, padx=5, pady=2)
+        self.upgrade_btn3 = Button(self.create_upgrade_frame, text=self.upgrade_3_value, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_auto_clicker())
+        self.upgrade_btn3.grid(row=4, column=1, sticky="ew", padx=5, pady=2)
 
        # Multiplier / VPN Label
-        Label(self.create_upgrade_frame, text="VPN (Multiplier):").grid(row=5, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="VPN (Multiplier):", font=REGULAR_FONT, bg=WIN7_BG).grid(row=5, column=0, sticky="w", pady=2)
 
         # Multiplier Button
-        self.upgrade_btn4 = Button(self.create_upgrade_frame, text=self.upgrade_4_value, command=lambda:self.purchace_multiplier())
-        self.upgrade_btn4.grid(row=5, column=1, padx=5, pady=2)
+        self.upgrade_btn4 = Button(self.create_upgrade_frame, text=self.upgrade_4_value, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_multiplier())
+        self.upgrade_btn4.grid(row=5, column=1, sticky="ew", padx=5, pady=2)
 
         # Tech support Label (Upgrade 5 - Critical Strike from Option 2)
-        Label(self.create_upgrade_frame, text="Tech Support (Crit):").grid(row=6, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="Tech Support (Crit):", font=REGULAR_FONT, bg=WIN7_BG).grid(row=6, column=0, sticky="w", pady=2)
 
         # Tech support Button
-        self.upgrade_btn5 = Button(self.create_upgrade_frame, text=self.upgrade_5_value, command=lambda:self.purchace_tech_support())
-        self.upgrade_btn5.grid(row=6, column=1, padx=5, pady=2)
+        self.upgrade_btn5 = Button(self.create_upgrade_frame, text=self.upgrade_5_value, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_tech_support())
+        self.upgrade_btn5.grid(row=6, column=1, sticky="ew", padx=5, pady=2)
 
         # Anti-virus Label
-        Label(self.create_upgrade_frame, text="Anti-virus (Win):").grid(row=7, column=0, pady=5)
+        Label(self.create_upgrade_frame, text="Anti-virus (Win):", font=REGULAR_FONT, bg=WIN7_BG).grid(row=7, column=0, sticky="w", pady=2)
         
         # Anti-virus Button
-        self.upgrade_btn6 = Button(self.create_upgrade_frame, text=self.upgrade_6_value, command=lambda:self.purchace_anti_virus())
-        self.upgrade_btn6.grid(row=7, column=1, padx=5, pady=2)
+        self.upgrade_btn6 = Button(self.create_upgrade_frame, text=self.upgrade_6_value, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=lambda:self.purchace_anti_virus())
+        self.upgrade_btn6.grid(row=7, column=1, sticky="ew", padx=5, pady=2)
 
         # Save Button
-        self.save_btn = Button(self.create_upgrade_frame, text="Save Game", bg="lightblue", command=self.save_game)
+        self.save_btn = Button(self.create_upgrade_frame, text="Save Game", bg="#CDE6F7", font=REGULAR_FONT, command=self.save_game)
         self.save_btn.grid(row=8, column=0, columnspan=2, pady=10, sticky="ew")
 
         self.check_spawn_rate_limit()
@@ -317,9 +339,10 @@ class clickerGUI:
         notif = Toplevel(self.root)
         notif.title("Saved")
         notif.geometry("200x100")
+        notif.config(bg=WIN7_BG)
         notif.attributes('-topmost', True)
-        Label(notif, text="Game Saved Successfully!", font=("Arial", 10)).pack(pady=20)
-        Button(notif, text="OK", command=notif.destroy).pack()
+        Label(notif, text="Game Saved Successfully!", font=REGULAR_FONT, bg=WIN7_BG).pack(pady=20)
+        Button(notif, text="OK", width=10, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=notif.destroy).pack()
 
     def popup_gui(self):
          # Checks the amount of active popups is under the max
@@ -328,6 +351,8 @@ class clickerGUI:
 
         # Creates the clickable popup windows 
         popup = Toplevel()
+        popup.attributes('-topmost', True)
+        popup.config(bg=WIN7_BG)
         popup_id = id(popup)
         popup.title("Close me!")
         
@@ -346,7 +371,11 @@ class clickerGUI:
         # Set geometry with size and random position (WxH+X+Y)
         popup.geometry(f"{width}x{height}+{x}+{y}")
 
-        popup_btn = Button(popup, text="[X]", command=lambda:self.close_popup(popup_id))
+        # Configure popup grid
+        popup.rowconfigure(0, weight=1)
+        popup.columnconfigure(0, weight=1)
+
+        popup_btn = Button(popup, text="[X]", bg=WIN7_BTN_BG, font=("Segoe UI", 12, "bold"), command=lambda:self.close_popup(popup_id))
         popup_btn.grid(row=0, column=0, sticky="NSEW")
 
         # When popup is destroyed
@@ -518,11 +547,12 @@ class clickerGUI:
             win_win = Toplevel(self.root)
             win_win.title("Victory!")
             win_win.geometry("300x150")
+            win_win.config(bg=WIN7_BG)
             win_win.attributes('-topmost', True)
 
-            Label(win_win, text="SYSTEM CLEANED!", font=("Arial", 16, "bold"), fg="green").pack(pady=20)
-            Label(win_win, text="You successfully installed the Anti-Virus\nand eradicated all viruses!", font=("Arial", 10)).pack(pady=5)
-            Button(win_win, text="Close Game", command=self.root.destroy).pack(pady=10)
+            Label(win_win, text="SYSTEM CLEANED!", font=("Segoe UI", 14, "bold"), bg=WIN7_BG, fg="green").pack(pady=20)
+            Label(win_win, text="You successfully installed the Anti-Virus\nand eradicated all viruses!", font=REGULAR_FONT, bg=WIN7_BG).pack(pady=5)
+            Button(win_win, text="Close Game", width=12, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=self.root.destroy).pack(pady=10)
 
 if __name__ == "__main__":
     root = Tk()

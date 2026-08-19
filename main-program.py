@@ -3,12 +3,12 @@ import random
 import json
 import os
 
-TITLE_FONT = ("Segoe UI", 12, "bold")
-REGULAR_FONT = ("Segoe UI", 9)
 MAX_POPUPS = 10
 SAVE_FILE = "saves.json"
 
-# Windows 7 Aero-inspired styling colors
+# Window styling
+TITLE_FONT = ("Segoe UI", 12, "bold")
+REGULAR_FONT = ("Segoe UI", 9)
 WIN7_BG = "#F0F0F0"
 WIN7_BTN_BG = "#E1E1E1"
 WIN7_BTN_ACTIVE = "#CCE8FF"
@@ -16,6 +16,7 @@ WIN7_ACCENT = "#3C7FB1"
 
 class StartMenu:
     def __init__(self, root):
+        # Create the main menu
         self.root = root
         self.root.title("Virus Clicker - Select Save")
         self.root.geometry("320x260")
@@ -47,19 +48,23 @@ class StartMenu:
         error_lbl.pack(pady=2)
 
         def confirm_name():
-            # Validates the input and creates a default save dictionary
+            # Validates the name input and creates a default save dictionary
             name = name_entry.get().strip()
             
+            # Check if name is blank
             if not name:
                 error_lbl.config(text="Name cannot be empty!")
                 return
+            # Check if name is over 12 characters
             if len(name) >= 12:
                 error_lbl.config(text="Name must be under 12 characters!")
                 return
+            # Check if name contains numbers and or symbols
             if not name.isalpha():
                 error_lbl.config(text="Name can only contain letters!")
                 return
             
+            # Default/New game data
             data = {
                 "name": name,
                 "currency": 0,
@@ -82,7 +87,7 @@ class StartMenu:
             self.root.destroy()
             
             main_root = Tk()
-            clickerGUI(main_root, data)
+            ClickerGUI(main_root, data)
 
         Button(name_win, text="Start", width=10, bg=WIN7_BTN_BG, font=REGULAR_FONT, command=confirm_name).pack(pady=10)
 
@@ -103,6 +108,7 @@ class StartMenu:
         except:
             saves = {}
 
+        # Create a message if no/blank save file
         if not saves:
             load_win = Toplevel(self.root)
             load_win.title("Error")
@@ -151,7 +157,7 @@ class StartMenu:
             self.root.destroy()
             
             main_root = Tk()
-            clickerGUI(main_root, data)
+            ClickerGUI(main_root, data)
 
         def delete_save():
             # Checks if a name has been selected
@@ -194,7 +200,7 @@ class StartMenu:
             json.dump(saves, f, indent=4)
 
 
-class clickerGUI:
+class ClickerGUI:
     def __init__(self, root, player_data):
         self.root = root
         self.player_name = player_data["name"]
